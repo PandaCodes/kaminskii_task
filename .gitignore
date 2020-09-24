@@ -2,4 +2,5 @@
 EMG_data_for_gestures-master.zip
 data/*
 !data/01
+!data/12
 *.DS_Store
