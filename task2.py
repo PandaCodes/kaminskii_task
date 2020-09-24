@@ -28,10 +28,10 @@ def check_for_conflicts_slow(ns, conflict_radius):
 				if j not in conflicting_idxs:
 					conflicting_idxs[j] = True
 					count += 1
-	##
-	# global alg_0_conflict_set 
-	# alg_0_conflict_set = set(conflicting_idxs.keys())
-	##
+	#
+	global alg_0_conflict_set 
+	alg_0_conflict_set = set(conflicting_idxs.keys())
+	#
 	return count
 
 
@@ -56,41 +56,39 @@ def check_for_conflicts(nerves, conflict_radius):
 			grid_info[x_grid] = {}
 		if y_grid not in grid_info[x_grid]:
 			grid_info[x_grid][y_grid] = []
-		elif len(grid_info[x_grid][y_grid]) > 1:
-			add_conf(i)		
 		# elif len(grid_info[x_grid][y_grid]) == 0: # empty only on creation
 		# 	print("waaat?")	
 		else:
-			j = grid_info[x_grid][y_grid][0]
-			if distance(cur_nerve, nerves[j]) < conflict_radius:
-				add_conf(i)
-				add_conf(j)
+			add_conf(i)
+			if len(grid_info[x_grid][y_grid]) == 1:
+				add_conf(grid_info[x_grid][y_grid][0])			
 		grid_info[x_grid][y_grid].append(i)
 
 		# Check surrounding cells that might be affected
-		x_min_affected = math.floor((cur_nerve[0] - conflict_radius)/d)
-		x_max_affected = math.floor((cur_nerve[0] + conflict_radius)/d)
-		y_min_affected = math.floor((cur_nerve[1] - conflict_radius)/d)
-		y_max_affected = math.floor((cur_nerve[1] + conflict_radius)/d)
+		x_min_affected = math.floor((cur_nerve[0] - conflict_radius + 1)/d)
+		x_max_affected = math.floor((cur_nerve[0] + conflict_radius - 1)/d)
+		y_min_affected = math.floor((cur_nerve[1] - conflict_radius + 1)/d)
+		y_max_affected = math.floor((cur_nerve[1] + conflict_radius - 1)/d)
 		for x in range(max(0, x_min_affected), min(cells_in_a_row, x_max_affected + 1)): 
 			for y in range(max(0, y_min_affected), min(cells_in_a_row, y_max_affected + 1)):
-				if not (x == x_grid and y == y_grid) and x in grid_info and y in grid_info[x]: 
-					# Alone neurons that required to be checked
-					if len(grid_info[x][y]) == 1 and grid_info[x][y][0] not in conflicting_idxs:
-						j = grid_info[x][y][0]
+				if x == x_grid and y == y_grid: continue
+				if x not in grid_info or y not in grid_info[x]: continue 
+				# Alone neurons that required to be checked
+				if len(grid_info[x][y]) == 1 and grid_info[x][y][0] not in conflicting_idxs:
+					j = grid_info[x][y][0]
+					if distance(cur_nerve, nerves[j]) < conflict_radius:
+						add_conf(i)
+						add_conf(j)
+				# Checking for conflicts with neighbour cell if necessary
+				elif i not in conflicting_idxs: 
+					for j in grid_info[x][y]:
 						if distance(cur_nerve, nerves[j]) < conflict_radius:
 							add_conf(i)
-							add_conf(j)
-					# Checking for conflicts with neighbour cell if necessary
-					elif i not in conflicting_idxs: 
-						for j in grid_info[x][y]:
-							if distance(cur_nerve, nerves[j]) < conflict_radius:
-								add_conf(i)
-								break
-	##
-	# global alg_1_conflict_set 
-	# alg_1_conflict_set = set(conflicting_idxs.keys())
-	##
+							break
+	#
+	global alg_1_conflict_set 
+	alg_1_conflict_set = set(conflicting_idxs.keys())
+	#
 	return count
 
 
@@ -116,9 +114,9 @@ if __name__ == '__main__':
 	# ~121ms
 
 	# n_conflicts_slow = check_for_conflicts_slow(neuron_positions, CONFLICT_RADIUS)
-	## Cross-checking algorithms
+	# # Cross-checking algorithms
 	# diff_set = alg_0_conflict_set.symmetric_difference(alg_1_conflict_set)
-	# print(" Result difference : {}\n".format( len(diff_set) ))
-	##
+	# print(f" Result difference : { len(diff_set) } Slow alg result: {n_conflicts_slow} \n")
+	# #
 
 	
