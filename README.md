@@ -1,7 +1,5 @@
 # Application Task for Insai-Tech
 
-Work is still in progres and might be complemented over the time till the deadline during moments of inspiration...
-
 ## Task 1
 Information in notebook
 
