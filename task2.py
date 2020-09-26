@@ -28,10 +28,10 @@ def check_for_conflicts_slow(ns, conflict_radius):
 				if j not in conflicting_idxs:
 					conflicting_idxs[j] = True
 					count += 1
-	#
-	global alg_0_conflict_set 
-	alg_0_conflict_set = set(conflicting_idxs.keys())
-	#
+	# #
+	# global alg_0_conflict_set 
+	# alg_0_conflict_set = set(conflicting_idxs.keys())
+	# #
 	return count
 
 
@@ -85,10 +85,10 @@ def check_for_conflicts(nerves, conflict_radius):
 						if distance(cur_nerve, nerves[j]) < conflict_radius:
 							add_conf(i)
 							break
-	#
-	global alg_1_conflict_set 
-	alg_1_conflict_set = set(conflicting_idxs.keys())
-	#
+	# #
+	# global alg_1_conflict_set 
+	# alg_1_conflict_set = set(conflicting_idxs.keys())
+	# #
 	return count
 
 
